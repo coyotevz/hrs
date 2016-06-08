@@ -1,0 +1,7 @@
+Flask
+Flask-Script
+Flask-SQLAlchemy
+python-dateutil
+psycopg2
+marshmallow
+webargs
