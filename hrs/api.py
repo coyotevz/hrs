@@ -20,7 +20,7 @@ def configure_api(app):
 
 @api.route('/employees')
 def list_employees():
-    q = Employee.query.order_by(Employee.file_no)
+    q = Employee.query.order_by(Employee.hire_date)
     return build_result(q, EmployeeSchema())
 
 
