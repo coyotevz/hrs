@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, url_for, abort
+from werkzeug.exceptions import UnprocessableEntity
 
 from sqlalchemy.exc import IntegrityError
 
@@ -31,6 +32,17 @@ def new_employee():
     db.session.commit()
     return (build_result(employee, EmployeeSchema()), 201,
             {'Location': url_for('.get_employee', id=employee.id)})
+
+@api.route('/employees/validation', methods=['POST'])
+def validate_employee_data():
+    try:
+        e = parser.parse(EmployeeSchema(strict=True))
+        err = {'error': None}
+    except UnprocessableEntity as ex:
+        err = {'error': "Validation Error"}
+        if hasattr(ex, 'data') and 'messages' in ex.data:
+            err.update({'messages': ex.data['messages']})
+    return err, 200
 
 
 @api.route('/employees/<int:id>')
